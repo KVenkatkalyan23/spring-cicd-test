@@ -9,4 +9,9 @@ public class TestController {
     public String getVersion(){
         return "prod";
     }
+
+     @GetMapping("/")
+    public String health() {
+        return "OK";
+    }
 }
