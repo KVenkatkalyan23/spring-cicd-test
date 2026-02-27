@@ -4,8 +4,6 @@ phases:
   install:
     runtime-versions:
       java: corretto21
-    commands:
-      - mvn -version
 
   pre_build:
     commands:
@@ -19,6 +17,7 @@ phases:
     commands:
       - mkdir -p deploy
       - cp target/*.jar deploy/app.jar
+      - test -f Procfile || echo "web: java -jar app.jar" > Procfile
       - cp Procfile deploy/Procfile
       - cd deploy
       - zip -r ../app-bundle.zip .
