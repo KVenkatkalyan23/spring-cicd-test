@@ -4,26 +4,30 @@ phases:
   install:
     runtime-versions:
       java: corretto21
+    commands:
+      - "echo install"
+      - "mvn -version"
 
   pre_build:
     commands:
-      - mvn -B clean test
+      - "echo pre_build"
+      - "mvn -B clean test"
 
   build:
     commands:
-      - mvn -B package -DskipTests
+      - "echo build"
+      - "mvn -B package -DskipTests"
 
   post_build:
     commands:
-      - rm -rf deploy app-bundle.zip
-      - mkdir -p deploy
-      - cp target/*.jar deploy/app.jar
-      - echo "web: java -XX:MaxRAMPercentage=75 -jar app.jar" > deploy/Procfile
-      - cd deploy
-      - zip -r ../app-bundle.zip ./*
-      - cd ..
-      - unzip -l app-bundle.zip | head -n 30
+      - "echo post_build"
+      - "mkdir -p deploy"
+      - "cp target/*.jar deploy/app.jar"
+      - "echo web: java -jar app.jar > deploy/Procfile"
+      - "cd deploy"
+      - "zip -r ../app-bundle.zip ."
+      - "cd .."
 
 artifacts:
   files:
-    - app-bundle.zip
+    - "app-bundle.zip"
