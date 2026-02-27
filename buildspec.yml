@@ -1,0 +1,50 @@
+version: 0.2
+
+env:
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=/root/.m2/repository"
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+    commands:
+      - echo "Using Java version:"
+      - java -version
+      - echo "Using Maven version:"
+      - mvn -version
+
+  pre_build:
+    commands:
+      - echo "Running unit tests..."
+      - mvn -B clean test
+
+  build:
+    commands:
+      - echo "Building Spring Boot JAR..."
+      - mvn -B package -DskipTests
+      - echo "Build completed"
+
+  post_build:
+    commands:
+      - echo "Preparing Elastic Beanstalk deployment bundle..."
+      - mkdir -p deploy
+      - cp target/*.jar deploy/app.jar
+      - cp Procfile deploy/Procfile
+      - |
+        if [ -d .ebextensions ]; then
+          cp -r .ebextensions deploy/.ebextensions
+        fi
+      - cd deploy
+      - zip -r ../app-bundle.zip .
+      - cd ..
+      - echo "Deployment bundle created: app-bundle.zip"
+
+artifacts:
+  files:
+    - app-bundle.zip
+  discard-paths: yes
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
