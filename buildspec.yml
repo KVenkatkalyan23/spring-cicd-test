@@ -1,46 +1,29 @@
 version: 0.2
 
-env:
-  variables:
-    MAVEN_OPTS: "-Dmaven.repo.local=/root/.m2/repository"
-
 phases:
   install:
     runtime-versions:
       java: corretto21
     commands:
-      - echo "Java:"
-      - java -version
-      - echo "Maven:"
       - mvn -version
 
   pre_build:
     commands:
-      - echo "Running tests..."
       - mvn -B clean test
 
   build:
     commands:
-      - echo "Building jar..."
       - mvn -B package -DskipTests
 
   post_build:
     commands:
-      - echo "Preparing Elastic Beanstalk bundle..."
       - mkdir -p deploy
       - cp target/*.jar deploy/app.jar
       - cp Procfile deploy/Procfile
-      - 'if [ -d .ebextensions ]; then cp -r .ebextensions deploy/.ebextensions; fi'
       - cd deploy
       - zip -r ../app-bundle.zip .
       - cd ..
-      - echo "Bundle created: app-bundle.zip"
 
 artifacts:
   files:
     - app-bundle.zip
-  discard-paths: yes
-
-cache:
-  paths:
-    - /root/.m2/**/*
