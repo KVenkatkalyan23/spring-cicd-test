@@ -23,7 +23,7 @@ phases:
       - "echo post_build"
       - "mkdir -p deploy"
       - "cp target/*.jar deploy/app.jar"
-      - "echo web: java -jar app.jar > deploy/Procfile"
+      - "echo 'web: java -jar app.jar' > deploy/Procfile"
       - "cd deploy"
       - "zip -r ../app-bundle.zip ."
       - "cd .."
