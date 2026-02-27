@@ -1,8 +1,12 @@
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public  class TestController{
+public class TestController {
     @GetMapping("/version")
-    public String test(){
-        return "v8.0";
+    public String getVersion(){
+        return "prod";
     }
 }
