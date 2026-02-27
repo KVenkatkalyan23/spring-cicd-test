@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("/version")
     public String getVersion(){
-        return "prod";
+        return "dev";
     }
 }
